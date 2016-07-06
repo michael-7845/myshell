@@ -1,0 +1,68 @@
+#!/bin/bash
+ 
+## set var from upall.sh
+ 
+# 1. change the j2ee server jdbc properties ; jmail properties; system-config.xml
+# jdbc
+sed -i "s/10.120.10.21:3306/$HOST:3306/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jdbc.properties
+sed -i "s/database.user=messenger/database.user=$USER/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jdbc.properties
+sed -i "s/database.password=123qwe/database.password=$PASSWD/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jdbc.properties
+#jmail
+sed -i "s/http:\/\/10.120.10.41:4560/http:\/\/localhost:4560/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jmail.properties
+# system-config.xml
+sed -i "s/<domain>10.120.10.37<\/domain>/<domain>$HOST<\/domain>/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/system-config.xml
+sed -i "s/<user>ckuser<\/user>/<user>kemin<\/user>/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/system-config.xml
+sed -i "s/<password>7p4mh5g2<\/password>/<password>password<\/password>/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/system-config.xml
+sed -i "s/<http_address>http:\/\/10.120.10.37<\/http_address>/<http_address>http:\/\/$HOST<\/http_address>/g" /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/system-config.xml
+ 
+# 2. change the web server jdbc properties ; system-config-web.xml ; url.jsp
+# jdbc
+sed -i "s/10.120.10.21:3306/$HOST:3306/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/jdbc-web.properties
+sed -i "s/database.user=messenger/database.user=$USER/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/jdbc-web.properties
+sed -i "s/database.password=123qwe/database.password=$PASSWD/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/jdbc-web.properties
+# system-config-web.xml
+sed -i "s/<xmpp_rpc_server>http:\/\/10.120.10.41:4560<\/xmpp_rpc_server>/<xmpp_rpc_server>http:\/\/localhost:4560<\/xmpp_rpc_server>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-I
+NF/classes/system-config-web.xml
+sed -i "s/<domain>10.120.10.37<\/domain>/<domain>$HOST<\/domain>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-web.xml
+sed -i "s/<user>ckuser<\/user>/<user>kemin<\/user>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-web.xml
+sed -i "s/<password>7p4mh5g2<\/password>/<password>password<\/password>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-web.xml
+sed -i "s/<http_address>http:\/\/10.120.10.37<\/http_address>/<http_address>http:\/\/$HOST<\/http_address>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-w
+eb.xml
+
+sed -i "s/<http_bind>http:\/\/xf.haatalk.com\/a\/<\/http_bind>/<http_bind>http:\/\/kemin.haatalk.com\/a\/<\/http_bind>/g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-web.xml
+
+http:\/\/kemin.haatalk.com\/a\/
+# url.jsp
+sed -i "s/http:\/\/xf.haatalk.com\/a\//http:\/\/$DN\/a\//g" /usr/local/tomcat/webapps/haatalk_web/WEB-INF/jsp/include/url.jsp
+
+# /usr/local/haatalk/config
+# rm -rf /usr/local/haatalk/
+if [ ! -d /usr/local/haatalk/config ] ; then
+  mkdir -p /usr/local/haatalk/config
+fi
+
+if [ ! -f /usr/local/haatalk/config/jdbc.properties ] ; then
+  cp /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jdbc.properties /usr/local/haatalk/config/
+fi
+
+if [ ! -f /usr/local/haatalk/config/jmail.properties ] ; then
+  cp /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/jmail.properties /usr/local/haatalk/config/
+fi
+
+if [ ! -f /usr/local/haatalk/config/system-config.xml ] ; then
+  cp /usr/local/tomcat/webapps/haatalk/WEB-INF/classes/system-config.xml /usr/local/haatalk/config/
+fi
+
+if [ ! -f /usr/local/haatalk/config/jdbc-web.properties ] ; then
+  cp /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/jdbc-web.properties /usr/local/haatalk/config/
+fi
+
+if [ ! -f /usr/local/haatalk/config/jmail-web.properties ] ; then
+  cp /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/jmail-web.properties /usr/local/haatalk/config/
+fi
+
+if [ ! -f /usr/local/haatalk/config/system-config-web.xml ] ; then
+  cp /usr/local/tomcat/webapps/haatalk_web/WEB-INF/classes/system-config-web.xml /usr/local/haatalk/config/
+fi
+
+exit
